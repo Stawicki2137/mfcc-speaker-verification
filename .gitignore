@@ -1,0 +1,16 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+
+# VS Code settings
+.vscode/
+
+# Data and audio files
+data/raw/**
+!data/raw/.gitkeep
+!data/raw/target/.gitkeep
+!data/raw/others/.gitkeep
+
+# Models and results artifacts
+models/
+results/
