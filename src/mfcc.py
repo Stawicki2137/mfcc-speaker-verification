@@ -1,2 +1,0 @@
-# MFCC feature extraction implementation
-
