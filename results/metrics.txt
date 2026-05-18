@@ -1,1 +1,98 @@
-# Metrics will be saved here
+Speaker Verification - Model Comparison
+=============================================
+
+Model: SVM
+---------------------------------------------
+Accuracy : 0.8889
+Precision: 0.8889
+Recall   : 0.8889
+F1-score : 0.8889
+
+Confusion matrix:
+[[16  2]
+ [ 2 16]]
+
+Classification report:
+              precision    recall  f1-score   support
+
+       other       0.89      0.89      0.89        18
+      target       0.89      0.89      0.89        18
+
+    accuracy                           0.89        36
+   macro avg       0.89      0.89      0.89        36
+weighted avg       0.89      0.89      0.89        36
+
+
+=============================================
+
+Model: k-NN
+---------------------------------------------
+Accuracy : 0.8889
+Precision: 0.8889
+Recall   : 0.8889
+F1-score : 0.8889
+
+Confusion matrix:
+[[16  2]
+ [ 2 16]]
+
+Classification report:
+              precision    recall  f1-score   support
+
+       other       0.89      0.89      0.89        18
+      target       0.89      0.89      0.89        18
+
+    accuracy                           0.89        36
+   macro avg       0.89      0.89      0.89        36
+weighted avg       0.89      0.89      0.89        36
+
+
+=============================================
+
+Model: Random Forest
+---------------------------------------------
+Accuracy : 0.8889
+Precision: 0.8889
+Recall   : 0.8889
+F1-score : 0.8889
+
+Confusion matrix:
+[[16  2]
+ [ 2 16]]
+
+Classification report:
+              precision    recall  f1-score   support
+
+       other       0.89      0.89      0.89        18
+      target       0.89      0.89      0.89        18
+
+    accuracy                           0.89        36
+   macro avg       0.89      0.89      0.89        36
+weighted avg       0.89      0.89      0.89        36
+
+
+=============================================
+
+Model: Logistic Regression
+---------------------------------------------
+Accuracy : 0.9444
+Precision: 0.9000
+Recall   : 1.0000
+F1-score : 0.9474
+
+Confusion matrix:
+[[16  2]
+ [ 0 18]]
+
+Classification report:
+              precision    recall  f1-score   support
+
+       other       1.00      0.89      0.94        18
+      target       0.90      1.00      0.95        18
+
+    accuracy                           0.94        36
+   macro avg       0.95      0.94      0.94        36
+weighted avg       0.95      0.94      0.94        36
+
+
+=============================================
