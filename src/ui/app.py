@@ -50,6 +50,10 @@ class SpeakerVerificationApp:
         from src.ui.components.training_tab import TrainingTab
         self.train_tab = TrainingTab(self.notebook, self.controller, self.state)
         self.notebook.add(self.train_tab, text="Training")
+        
+        from src.ui.components.prediction_tab import PredictionTab
+        self.pred_tab = PredictionTab(self.notebook, self.controller, self.state)
+        self.notebook.add(self.pred_tab, text="Prediction")
 
 def run_app():
     root = tk.Tk()
