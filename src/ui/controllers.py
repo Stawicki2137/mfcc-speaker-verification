@@ -95,3 +95,88 @@ class AppController:
             
         except Exception as e:
             self.log(f"Training Error: {str(e)}")
+
+    def start_recording(self):
+        if self.state.active_model is None:
+            self.log("Error: Please train or load a model first.")
+            return False
+            
+        import sounddevice as sd
+        self.audio_queue = queue.Queue()
+        self.fs = 44100
+        
+        def callback(indata, frames, time, status):
+            if status:
+                print(status)
+            self.audio_queue.put(indata.copy())
+            
+        self.stream = sd.InputStream(samplerate=self.fs, channels=1, dtype='int16', callback=callback)
+        self.stream.start()
+        self.log("Recording started...")
+        return True
+
+    def stop_recording_and_predict(self, callback_ui=None):
+        if not hasattr(self, 'stream') or not self.stream.active:
+            return
+            
+        self.stream.stop()
+        self.stream.close()
+        self.log("Recording stopped. Processing...")
+        
+        threading.Thread(target=self._process_audio_thread, args=(callback_ui,), daemon=True).start()
+        
+    def _process_audio_thread(self, callback_ui):
+        import numpy as np
+        import time
+        from pathlib import Path
+        from scipy.io import wavfile
+        from src.predict import get_target_probability
+        from src.features import extract_feature_vector_from_file
+        
+        chunks = []
+        while not self.audio_queue.empty():
+            chunks.append(self.audio_queue.get())
+            
+        if not chunks:
+            self.log("No audio recorded.")
+            return
+            
+        recording = np.concatenate(chunks, axis=0)
+        temp_path = Path("temp_audio") / f"rec_{int(time.time())}.wav"
+        temp_path.parent.mkdir(exist_ok=True)
+        wavfile.write(temp_path, self.fs, recording)
+        
+        try:
+            _, f_vec = extract_feature_vector_from_file(temp_path, **self.state.active_mfcc_params)
+            prob = get_target_probability(self.state.active_model, f_vec.reshape(1, -1))
+            
+            res_text = f"Target Probability: {prob*100:.1f}%"
+            is_target = prob >= 0.5
+            self.log(res_text + (" -> ACCESS GRANTED" if is_target else " -> DENIED"))
+            
+            if callback_ui:
+                callback_ui(prob, is_target)
+                
+        except Exception as e:
+            self.log(f"Prediction error: {e}")
+
+    def load_model(self, path: str):
+        import joblib
+        from pathlib import Path
+        try:
+            data = joblib.load(path)
+            if isinstance(data, dict):
+                self.update_state(
+                    active_model=data["model"],
+                    active_mfcc_params=data["mfcc_params"],
+                    active_model_path=Path(path).name
+                )
+            else:
+                self.update_state(
+                    active_model=data,
+                    active_mfcc_params={},
+                    active_model_path=Path(path).name
+                )
+            self.log(f"Loaded model: {Path(path).name}")
+        except Exception as e:
+            self.log(f"Failed to load model: {e}")
