@@ -42,6 +42,14 @@ class SpeakerVerificationApp:
         log_frame.pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True)
         self.log_text = tk.Text(log_frame, height=8, state=tk.DISABLED, bg="#f4f4f4")
         self.log_text.pack(fill=tk.BOTH, expand=True)
+        
+        # Tabs
+        self.notebook = ttk.Notebook(main_frame)
+        self.notebook.pack(side=tk.TOP, fill=tk.BOTH, expand=True, pady=(0, 10))
+        
+        from src.ui.components.training_tab import TrainingTab
+        self.train_tab = TrainingTab(self.notebook, self.controller, self.state)
+        self.notebook.add(self.train_tab, text="Training")
 
 def run_app():
     root = tk.Tk()
