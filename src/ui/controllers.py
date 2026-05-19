@@ -12,7 +12,24 @@ class AppController:
         self.available_models = list(create_models().keys())
         
     def update_state(self, **kwargs):
-        for k, v in kwargs.items():
-            if hasattr(self.state, k):
-                setattr(self.state, k, v)
-        self.state.notify()
+                for k, v in kwargs.items():
+                    if hasattr(self.state, k):
+                        setattr(self.state, k, v)
+                self.state.notify()
+        
+            def play_audio(self, path: str):
+                import sounddevice as sd
+                from scipy.io import wavfile
+                try:
+                    fs, data = wavfile.read(path)
+                    self.log(f"Playing {Path(path).name}...")
+                    threading.Thread(target=self._play_thread, args=(data, fs), daemon=True).start()
+                except Exception as e:
+                    self.log(f"Error playing audio: {e}")
+        
+            def _play_thread(self, data, fs):
+                import sounddevice as sd
+                sd.play(data, fs)
+                sd.wait()
+                self.log("Playback finished.")
+        
