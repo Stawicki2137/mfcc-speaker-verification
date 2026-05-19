@@ -42,7 +42,8 @@ def get_target_probability(model, feature_vector: np.ndarray) -> float:
 def predict_speaker(
     wav_path: str | Path,
     model_path: str | Path,
-    threshold: float = 0.5
+    threshold: float = 0.5,
+    **kwargs
 ) -> tuple[int, float]:
     """
     Predicts whether a WAV file belongs to the target speaker.
@@ -67,7 +68,7 @@ def predict_speaker(
 
     model = joblib.load(model_path)
 
-    _, feature_vector = extract_feature_vector_from_file(wav_path)
+    _, feature_vector = extract_feature_vector_from_file(wav_path, **kwargs)
 
     feature_vector = feature_vector.reshape(1, -1)
 

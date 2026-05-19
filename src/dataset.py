@@ -30,7 +30,8 @@ def find_wav_files(directory: str | Path) -> list[Path]:
 
 def load_dataset(
     target_dir: str | Path,
-    others_dir: str | Path
+    others_dir: str | Path,
+    **kwargs
 ) -> Tuple[np.ndarray, np.ndarray, list[Path]]:
     """
     Builds dataset from target and others directories.
@@ -61,14 +62,14 @@ def load_dataset(
     file_paths = []
 
     for wav_path in target_files:
-        _, feature_vector = extract_feature_vector_from_file(wav_path)
+        _, feature_vector = extract_feature_vector_from_file(wav_path, **kwargs)
 
         X.append(feature_vector)
         y.append(TARGET_LABEL)
         file_paths.append(wav_path)
 
     for wav_path in other_files:
-        _, feature_vector = extract_feature_vector_from_file(wav_path)
+        _, feature_vector = extract_feature_vector_from_file(wav_path, **kwargs)
 
         X.append(feature_vector)
         y.append(OTHER_LABEL)

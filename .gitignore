@@ -1,6 +1,7 @@
 # Python artifacts
 __pycache__/
 *.py[cod]
+.pyre
 
 # VS Code settings
 .vscode/
@@ -14,3 +15,5 @@ data/raw/**
 # Models and results artifacts
 models/
 results/
+temp_audio/
+docs/
