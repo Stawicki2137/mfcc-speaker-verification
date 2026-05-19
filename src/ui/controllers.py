@@ -20,6 +20,7 @@ class AppController:
     def play_audio(self, path: str):
         import sounddevice as sd
         from scipy.io import wavfile
+        from pathlib import Path
         try:
             fs, data = wavfile.read(path)
             self.log(f"Playing {Path(path).name}...")
