@@ -20,6 +20,7 @@ class AppState:
     active_mfcc_params: dict = dataclasses.field(default_factory=dict)
     
     mislabels: list[dict] = dataclasses.field(default_factory=list)
+    model_kwargs: dict = dataclasses.field(default_factory=dict)
     
     # Simple observer pattern
     _callbacks: list[Callable] = dataclasses.field(default_factory=list)

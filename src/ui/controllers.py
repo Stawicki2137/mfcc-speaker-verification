@@ -66,6 +66,16 @@ class AppController:
             
             models = create_models()
             model = models[self.state.selected_model_type]
+            kwargs = getattr(self.state, "model_kwargs", {})
+            
+            if self.state.selected_model_type == "Logistic Regression":
+                model.set_params(classifier__C=kwargs.get("C", 1.0), classifier__max_iter=kwargs.get("max_iter", 1000))
+            elif self.state.selected_model_type == "SVM":
+                model.set_params(classifier__C=kwargs.get("C", 1.0))
+            elif self.state.selected_model_type == "Random Forest":
+                model.set_params(n_estimators=kwargs.get("n_estimators", 100))
+            elif self.state.selected_model_type == "k-NN":
+                model.set_params(classifier__n_neighbors=kwargs.get("n_neighbors", 3))
             
             model.fit(X_train, y_train)
             y_pred = model.predict(X_test)
