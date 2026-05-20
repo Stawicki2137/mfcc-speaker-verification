@@ -14,6 +14,7 @@ class AppState:
     frame_step_ms: float = 10.0
     
     selected_model_type: str = "Logistic Regression"
+    svm_kernel: str = "rbf"
     
     active_model_path: str = "None"
     active_model: Any = None

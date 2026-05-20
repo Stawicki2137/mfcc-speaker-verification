@@ -71,9 +71,9 @@ class AppController:
             if self.state.selected_model_type == "Logistic Regression":
                 model.set_params(classifier__C=kwargs.get("C", 1.0), classifier__max_iter=kwargs.get("max_iter", 1000))
             elif self.state.selected_model_type == "SVM":
-                model.set_params(classifier__C=kwargs.get("C", 1.0))
+                model.set_params(classifier__C=kwargs.get("C", 1.0), classifier__kernel=kwargs.get("kernel", "rbf"))
             elif self.state.selected_model_type == "Random Forest":
-                model.set_params(n_estimators=kwargs.get("n_estimators", 100))
+                model.set_params(classifier__n_estimators=kwargs.get("n_estimators", 100))
             elif self.state.selected_model_type == "k-NN":
                 model.set_params(classifier__n_neighbors=kwargs.get("n_neighbors", 3))
             

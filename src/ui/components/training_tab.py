@@ -26,6 +26,7 @@ class TrainingTab(ttk.Frame):
         self.param_max_iter_var = tk.IntVar(value=1000)
         self.param_n_estimators_var = tk.IntVar(value=100)
         self.param_n_neighbors_var = tk.IntVar(value=3)
+        self.param_svm_kernel_var = tk.StringVar(value=state.svm_kernel)
         
         self._build()
         self._update_model_params_ui()
@@ -79,6 +80,8 @@ class TrainingTab(ttk.Frame):
         f_svm = ttk.Frame(self.model_f)
         ttk.Label(f_svm, text="C (Reg):").grid(row=0, column=0, sticky=tk.W)
         ttk.Entry(f_svm, textvariable=self.param_c_var, width=10).grid(row=0, column=1, pady=2)
+        ttk.Label(f_svm, text="Kernel:").grid(row=1, column=0, sticky=tk.W)
+        ttk.Combobox(f_svm, textvariable=self.param_svm_kernel_var, values=["linear", "poly", "rbf", "sigmoid"], state="readonly", width=8).grid(row=1, column=1, pady=2)
         self.param_frames["SVM"] = f_svm
         
         # RF Frame
@@ -145,11 +148,13 @@ class TrainingTab(ttk.Frame):
             num_filters=self.num_filters_var.get(),
             frame_size_ms=self.frame_size_var.get(),
             frame_step_ms=self.frame_step_var.get(),
+            svm_kernel=self.param_svm_kernel_var.get(),
             model_kwargs={
                 "C": self.param_c_var.get(),
                 "max_iter": self.param_max_iter_var.get(),
                 "n_estimators": self.param_n_estimators_var.get(),
-                "n_neighbors": self.param_n_neighbors_var.get()
+                "n_neighbors": self.param_n_neighbors_var.get(),
+                "kernel": self.param_svm_kernel_var.get()
             }
         )
         self.controller.start_training()
