@@ -27,6 +27,8 @@ class PredictionTab(ttk.Frame):
         
         self.stop_btn = ttk.Button(af, text="⏹️ Stop Recording", command=self._stop_rec, state=tk.DISABLED)
         self.stop_btn.pack(side=tk.LEFT, expand=True, fill=tk.X, padx=5)
+
+        ttk.Button(af, text="📁 Load WAV File", command=self._load_wav).pack(side=tk.LEFT, expand=True, fill=tk.X, padx=5)
         
         # Result
         rf = ttk.Frame(self)
@@ -40,6 +42,11 @@ class PredictionTab(ttk.Frame):
         p = filedialog.askopenfilename(filetypes=[("Pickle", "*.pkl")])
         if p:
             self.controller.load_model(p)
+
+    def _load_wav(self):
+        p = filedialog.askopenfilename(filetypes=[("WAV", "*.wav")])
+        if p:
+            self.controller.predict_from_file(p, self._show_result)
             
     def _on_state_change(self):
         self.model_lbl_var.set(self.state.active_model_path)

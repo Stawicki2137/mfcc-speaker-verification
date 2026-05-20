@@ -135,6 +135,30 @@ class AppController:
         self.log("Recording stopped. Processing...")
         
         threading.Thread(target=self._process_audio_thread, args=(callback_ui,), daemon=True).start()
+
+    def predict_from_file(self, path: str, callback_ui=None):
+        if self.state.active_model is None:
+            self.log("Error: Please train or load a model first.")
+            return
+        
+        self.log(f"Processing file: {path}")
+        threading.Thread(target=self._process_file_thread, args=(path, callback_ui), daemon=True).start()
+
+    def _process_file_thread(self, path, callback_ui):
+        from pathlib import Path
+        from src.predict import get_target_probability
+        from src.features import extract_feature_vector_from_file
+        try:
+            _, f_vec = extract_feature_vector_from_file(Path(path), **self.state.active_mfcc_params)
+            prob = get_target_probability(self.state.active_model, f_vec.reshape(1, -1))
+            
+            is_target = prob >= 0.5
+            self.log(f"File {Path(path).name}: {prob*100:.1f}% -> {'GRANTED' if is_target else 'DENIED'}")
+            
+            if callback_ui:
+                callback_ui(prob, is_target)
+        except Exception as e:
+            self.log(f"Prediction error (file): {e}")
         
     def _process_audio_thread(self, callback_ui):
         import numpy as np
